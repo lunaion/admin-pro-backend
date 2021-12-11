@@ -37,22 +37,83 @@ const crearMedico = async (req, res = response) => {
         res.status(500).json({
             ok: false,
             msg: 'Por favor comuniquese con el administrador'
-        })
+        });
     }
 }
 
-const actulizarMedico = (req, res = response) => {
-    res.json({
-        ok: true,
-        msg: 'actulizarMedico'
-    });
+const actulizarMedico = async (req, res = response) => {
+
+    const id = req.params.id;
+    const uid = req.uid;
+
+    try {
+        
+        const medico = await Medico.findById( id );
+
+        if ( !medico ) {
+
+            return res.status(404).json({
+                ok: true,
+                msg: 'Médico no encontrado con el id'
+            });
+        }
+
+        const cambiosMedico = {
+            ...req.body,
+            usuario: uid
+        }
+
+        const medicoActulizado = await Medico.findByIdAndUpdate( id, cambiosMedico,  { new: true } );
+
+        res.json({
+            ok: true,
+            medico: medicoActulizado
+        });
+
+    } catch (error) {
+
+        console.log(error);
+
+        res.status(500).json({
+            ok: false,
+            msg: 'Por favor comuniquese con el administrador'
+        });
+    }
+
 }
 
-const borrarMedico = (req, res = response) => {
-    res.json({
-        ok: true,
-        msg: 'borrarMedico'
-    });
+const borrarMedico = async (req, res = response) => {
+
+    const id = req.params.id;
+    
+    try {
+        
+        const medico = await Medico.findById( id );
+
+        if ( !medico ) {
+
+            return res.status(404).json({
+                ok: true,
+                msg: 'Médico no encontrado con el id'
+            });
+        }
+
+        await Medico.findByIdAndDelete( id );
+
+        res.json({
+            ok: true,
+            msg: 'Médico eliminado'
+        });
+
+    } catch (error) {
+
+        console.log(error);
+
+        res.status(500).json({
+            ok: false,
+            msg: 'Por favor comuniquese con el administrador'
+        });
+    }
 }
 
 

@@ -34,12 +34,18 @@ router.post( '/',
 
 /* Actulizar medico */
 router.put( '/:id', 
-    [], 
+    [
+        validarJWT,
+        check('nombre', 'El nombre del médico es obligatorio').not().isEmpty(),
+        check('hospital', 'El hospital id debe de ser válido').isMongoId(),
+        validarCampos
+    ], 
     actulizarMedico 
 );
 
 /* Borrar medico */
 router.delete('/:id',
+    validarJWT,
     borrarMedico
 );
 
