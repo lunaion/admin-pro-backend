@@ -13,13 +13,14 @@ const {
     getMedicos,
     crearMedico,
     actulizarMedico,
-    borrarMedico
+    borrarMedico,
+    getMedicoById
 } = require('../controllers/medicos')
 
 const router = Router();
 
 /* Obtener medico */
-router.get( '/', getMedicos );
+router.get( '/', validarJWT, getMedicos );
 
 /* Crear medico */
 router.post( '/', 
@@ -47,6 +48,12 @@ router.put( '/:id',
 router.delete('/:id',
     validarJWT,
     borrarMedico
+);
+
+/* Obtener medico por Id */
+router.get('/:id',
+    validarJWT,
+    getMedicoById
 );
 
 
